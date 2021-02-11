@@ -1,11 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Hello, world</h1>
+<html>
+	<head>
+		<title>My First Javascript Query</title>
+	</head>
+	<body onload="makeRequest();"></body>
+
+<script>
+  	var req;
+
+	function makeRequest() {
+		if (window.XMLHttpRequest) { 
+			req = new XMLHttpRequest(); 
+		}
+		else if (window.ActiveXObject) {    	
+			req = new ActiveXObject("Msxml2.XMLHTTP");
+		}
+		else {
+			// Ajax not supported
+				return;
+		}
+			
+			req.onreadystatechange = function() {
+			var txt = "";
+		if (this.readyState == 4 && this.status == 200) {
+				var response = this.responseText;	
+				console.log (response);						
+								
+		
+		}
+	};
+	
+}
+
+	function loginReq() {
+		Input1 = document.getElementById ("input1").value;
+		Input2 = document.getElementById ("input2").value;
+	
+        req.open("GET", "/login?input1=" + Input1 + "&input2=" + Input2, true);
+        req.send();
+
+    }
+
+</script>
+
+<p>Input 1: <input type = "text" id = "input1"></input></p>
+<p>Input 2: <input type = "text" id = "input2"></input></p>
+
+
+<input type = "button" value = "Send" onclick = "loginReq();" />
+
 </body>
 </html>

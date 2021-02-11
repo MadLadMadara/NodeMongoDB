@@ -3,6 +3,26 @@ var express = require('express');
 var app = express();
 const PORT = process.env.PORT || 8080;
 
+// ATLIS DB
+
+
+// const MongoClient = require('mongodb').MongoClient;
+// const uri = "mongodb+srv://new_admin_123:Mw7hwkdyqPvAiT6o@cluster0.wrhu1.mongodb.net/test?retryWrites=true&w=majority";
+// MongoClient.connect(uri, function(err, db){
+//     if(err) throw err;
+//     console.log('end db stuff');
+// });
+
+
+
+const MongoClient = require('mongodb').MongoClient;
+const uri = "mongodb+srv://admin:ZpRCeQxTwu6dN9sU@cluster0.wrhu1.mongodb.net/test?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true });
+
+
+
+
+
 // set the port based on environment (more on environments later)
 var port = PORT;
 
@@ -23,7 +43,21 @@ adminRouter.get('/', function(req, res){
 app.route('/login')
     // show the form (GET http://localhost:PORT/login)
     .get(function(req, res) {
-        res.send('this is the login form');
+        var output = 'Processing the login form...'
+        var input1 = req.query.input1;
+        var input2 = req.query.input2;
+        var obj = {"username":input1, "password":input2};
+        client.connect(err => {
+            const collection = client.db("test").collection("users");
+            collection.insertOne(obj, (err, res) => {
+                if(err) throw err; 
+                console.log('one user added')
+            });
+            client.close();
+          });
+       
+        console.log(output+', Params:' + input1 + ", "+ input2); 
+        
     })
     // process the form (POST http://localhost:PORT/login)
     .post(function(req, res) { console.log('processing');
